@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_pokedex"
+        android:icon="@drawable/ic_baseline_menu_24"
+        android:title="@string/title_pokedex" />
+
+    <item
+        android:id="@+id/navigation_pokemon"
+        android:icon="@drawable/ic_baseline_bookmarks_24"
+        android:title="@string/title_pokemon" />
+</menu>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Pokémon IQUII</string>
+    <string name="title_pokedex">Pokédex</string>
+    <string name="title_pokemon">Pokémon</string>
+    <string name="pokemon_id">#{pokemon_id}</string>
+    <string name="pokemon_name">{pokemon_name}</string>
+    <string name="show_more">Mostra altro</string>
+</resources>
