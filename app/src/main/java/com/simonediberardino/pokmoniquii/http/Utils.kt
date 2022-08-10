@@ -12,7 +12,7 @@ import java.net.URL
 
 object Utils {
     @Throws(MalformedURLException::class, IOException::class)
-    fun drawableFromurl(url: String): Bitmap? {
+    fun bitmapFromUrl(url: String): Bitmap? {
         val connection: HttpURLConnection = URL(url).openConnection() as HttpURLConnection
         connection.setRequestProperty("User-agent", "Mozilla/4.0")
         connection.connect()

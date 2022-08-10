@@ -1,11 +1,10 @@
 package com.simonediberardino.pokmoniquii.entities
 
-import android.media.Image
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import com.simonediberardino.pokmoniquii.MainActivity
-import com.simonediberardino.pokmoniquii.R
+import com.simonediberardino.pokmoniquii.http.Utils
 
 data class Pokemon(
     val activity: MainActivity,
@@ -13,17 +12,13 @@ data class Pokemon(
     val idString: String,
     val name: String,
     var image: ImageView,
-    val view: View){
+    val view: View,
+    var isSaved: Boolean = false){
 
-    var isSaved = false
-        set(value){
-            field = value
-            view.findViewById<ImageView>(R.id.pokemon_toggle_iv).setBackgroundResource(
-                if(field)
-                    R.drawable.pokeball_colorized
-                else R.drawable.pokeball_bnw
-            )
-        }
+    init {
+        fetch()
+        updateImage()
+    }
 
     internal fun update(){
         if(isSaved){
@@ -31,8 +26,23 @@ data class Pokemon(
         }else activity.dbHandler.deletePokemon(this)
     }
 
-    fun fetch(){
+    private fun fetch(){
         isSaved = activity.dbHandler.isPokemonSaved(this)
-        println("is $this saved $isSaved")
     }
+
+    private fun updateImage() {
+        Thread{
+            val imageBitmap = getImageBitmap()
+            activity.runOnUiThread {
+                image.setBackgroundResource(0)
+                image.setImageBitmap(imageBitmap)
+            }
+        }.start()
+    }
+
+    private fun getImageBitmap(): Bitmap? {
+        val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+        return Utils.bitmapFromUrl(url)
+    }
+
 }

@@ -81,48 +81,52 @@ class HomeFragment : Fragment() {
     private fun inflatePokemon(pokemonReferenceResponse: PokemonReferenceResponse){
         val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
 
-        val idTV = pokemonViewGroup.findViewById<TextView>(R.id.pokemon_id_tv).also {
-            it.text = pokemonReferenceResponse.idString
-        }
-
-        val nameTV = pokemonViewGroup.findViewById<TextView>(R.id.pokemon_name_tv).also {
-            it.text = pokemonReferenceResponse.name
-        }
-
-        val imageView = pokemonViewGroup.findViewById<ImageView>(R.id.pokemon_iv)
-        val saveBtn = pokemonViewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv)
-
-        val pokemonImage = getPokemonDrawable(pokemonReferenceResponse.id)
-
         val pokemon = Pokemon(
             activity as MainActivity,
             pokemonReferenceResponse.id,
             pokemonReferenceResponse.idString,
             pokemonReferenceResponse.name,
-            imageView,
+            pokemonViewGroup.findViewById(R.id.pokemon_iv),
             pokemonViewGroup
         )
 
         pokemons.add(pokemon)
-        pokemon.fetch()
+        updateSavedImage(pokemon)
 
-        // Updates the imageview and removes or adds the pokemon from/to the database
-        saveBtn.setOnClickListener {
-            pokemon.isSaved = !pokemon.isSaved
-            pokemon.update()
+        // Pokemon ID text view
+        pokemonViewGroup.findViewById<TextView>(R.id.pokemon_id_tv).also {
+            it.text = pokemon.idString
         }
 
-        requireActivity().runOnUiThread {
-            imageView.setBackgroundResource(0)
-            imageView.setImageBitmap(pokemonImage)
+        // Pokemon name text view
+        pokemonViewGroup.findViewById<TextView>(R.id.pokemon_name_tv).also {
+            it.text = pokemon.name
+        }
 
+        // Pokemon toggle image view
+        pokemonViewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv).also {
+            // Updates the imageview and removes or adds the pokemon from/to the database
+            it.setOnClickListener {
+                pokemon.isSaved = !pokemon.isSaved
+                pokemon.update()
+                updateSavedImage(pokemon)
+            }
+        }
+
+        // Finally adds the view to the linear layout
+        requireActivity().runOnUiThread {
             linearLayout.addView(pokemonViewGroup)
         }
     }
 
-    private fun getPokemonDrawable(pokemonId: Int): Bitmap? {
-        val url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png"
-        return Utils.drawableFromurl(url)
+    private fun updateSavedImage(pokemon: Pokemon){
+        val toggleView = pokemon.view.findViewById<ImageView>(R.id.pokemon_toggle_iv)
+
+        toggleView.findViewById<ImageView>(R.id.pokemon_toggle_iv).setBackgroundResource(
+            if(pokemon.isSaved)
+                R.drawable.pokeball_colorized
+            else R.drawable.pokeball_bnw
+        )
     }
 
     override fun onDestroyView() {
