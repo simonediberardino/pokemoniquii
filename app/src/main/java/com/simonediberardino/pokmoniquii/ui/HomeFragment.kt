@@ -1,35 +1,34 @@
-package com.simonediberardino.pokmoniquii.ui.home
+package com.simonediberardino.pokmoniquii.ui
 
-import android.graphics.Bitmap
-import android.media.Image
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
-import com.simonediberardino.pokmoniquii.MainActivity
 import com.simonediberardino.pokmoniquii.R
 import com.simonediberardino.pokmoniquii.databinding.FragmentHomeBinding
-import com.simonediberardino.pokmoniquii.entities.Pokemon
+import com.simonediberardino.pokmoniquii.entities.PokemonInList
 import com.simonediberardino.pokmoniquii.http.HttpPokemonListResponse
 import com.simonediberardino.pokmoniquii.http.PokemonReferenceResponse
 import com.simonediberardino.pokmoniquii.http.Utils
+import com.simonediberardino.pokmoniquii.sharedprefs.CacheData
 
 class HomeFragment : Fragment() {
+    companion object{
+        private val POKE_PER_PAGE = 10
+    }
+
+    private lateinit var etSearchBar: EditText
     private lateinit var linearLayout: LinearLayout
     private lateinit var showMoreBtn: Button
-    private var pokemons: MutableList<Pokemon> = mutableListOf()
+    private var savedViews: MutableList<View> = mutableListOf()
     private var httpPokemonListResponse: HttpPokemonListResponse? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -41,18 +40,27 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        CacheData.savedPokemons.clear()
         linearLayout = binding.homePokemonLl
-        showMoreBtn = binding.homeShowMore.also { it.setOnClickListener { requestPokemonList() } }
+        showMoreBtn = binding.homeShowMore.also { it.setOnClickListener { requestPokemonListFromApi() } }
+        etSearchBar = binding.homeEtSearch.also { it.doOnTextChanged { text, _, _, _ -> onTextUpdated(text.toString()) } }
 
-        requestPokemonList()
-
+        this.populateLinearLayout()
         return binding.root
     }
 
-    private fun requestPokemonList(){
+    private fun populateLinearLayout(){
+        if(!Utils.isInternetAvailable(activity as Activity)) {
+            inflateCachedPokemon()
+        }else{
+            requestPokemonListFromApi()
+        }
+    }
+    
+    private fun requestPokemonListFromApi(){
         Thread{
             val endPoint = when {
-                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=0&limit=10"
+                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=${CacheData.savedPokemons.size}&limit=$POKE_PER_PAGE"
                 httpPokemonListResponse?.next == null -> return@Thread
                 else -> httpPokemonListResponse!!.next
             }!!
@@ -72,6 +80,22 @@ class HomeFragment : Fragment() {
         }.start()
     }
 
+
+    private fun inflateCachedPokemon(){
+        CacheData.getPokemonList().forEach {
+            val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
+            inflatePokemon(
+                PokemonInList(
+                    it.id,
+                    it.idString,
+                    it.name,
+                    pokemonViewGroup.findViewById(R.id.pokemon_iv),
+                    pokemonViewGroup as ViewGroup
+                )
+            )
+        }
+    }
+
     private fun showPokemons(httpPokemonListResponse: HttpPokemonListResponse){
         this.httpPokemonListResponse = httpPokemonListResponse
         this.httpPokemonListResponse!!.results.forEach { inflatePokemon(it) }
@@ -81,30 +105,34 @@ class HomeFragment : Fragment() {
     private fun inflatePokemon(pokemonReferenceResponse: PokemonReferenceResponse){
         val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
 
-        val pokemon = Pokemon(
-            activity as MainActivity,
+        val pokemon = PokemonInList(
             pokemonReferenceResponse.id,
             pokemonReferenceResponse.idString,
             pokemonReferenceResponse.name,
             pokemonViewGroup.findViewById(R.id.pokemon_iv),
-            pokemonViewGroup
+            pokemonViewGroup as ViewGroup
         )
 
-        pokemons.add(pokemon)
+        inflatePokemon(pokemon)
+    }
+
+    private fun inflatePokemon(pokemon: PokemonInList){
         updateSavedImage(pokemon)
 
+        savedViews.add(pokemon.viewGroup)
+
         // Pokemon ID text view
-        pokemonViewGroup.findViewById<TextView>(R.id.pokemon_id_tv).also {
+        pokemon.viewGroup.findViewById<TextView>(R.id.pokemon_id_tv).also {
             it.text = pokemon.idString
         }
 
         // Pokemon name text view
-        pokemonViewGroup.findViewById<TextView>(R.id.pokemon_name_tv).also {
+        pokemon.viewGroup.findViewById<TextView>(R.id.pokemon_name_tv).also {
             it.text = pokemon.name
         }
 
         // Pokemon toggle image view
-        pokemonViewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv).also {
+        pokemon.viewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv).also {
             // Updates the imageview and removes or adds the pokemon from/to the database
             it.setOnClickListener {
                 pokemon.isSaved = !pokemon.isSaved
@@ -115,18 +143,35 @@ class HomeFragment : Fragment() {
 
         // Finally adds the view to the linear layout
         requireActivity().runOnUiThread {
-            linearLayout.addView(pokemonViewGroup)
+            (pokemon.viewGroup.parent as ViewGroup?)?.removeView(pokemon.viewGroup)
+            linearLayout.addView(pokemon.viewGroup)
         }
     }
 
-    private fun updateSavedImage(pokemon: Pokemon){
-        val toggleView = pokemon.view.findViewById<ImageView>(R.id.pokemon_toggle_iv)
+    private fun updateSavedImage(pokemon: PokemonInList){
+        val toggleView = pokemon.viewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv)
 
         toggleView.findViewById<ImageView>(R.id.pokemon_toggle_iv).setBackgroundResource(
             if(pokemon.isSaved)
                 R.drawable.pokeball_colorized
             else R.drawable.pokeball_bnw
         )
+    }
+
+    private fun onTextUpdated(text: String){
+        for(view: View in savedViews){
+            if(text.length <= 1) {
+                view.visibility = View.VISIBLE
+                continue
+            }
+
+            val pokemonName = view.findViewById<TextView>(R.id.pokemon_name_tv).text.toString()
+            val pokemonId = view.findViewById<TextView>(R.id.pokemon_id_tv).text.toString()
+
+            if(!pokemonName.contains(text) && !pokemonId.contains(text))
+                view.visibility = View.GONE
+            else view.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroyView() {

@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_pokedex"
-        android:name="com.simonediberardino.pokmoniquii.ui.home.HomeFragment"
+        android:name="com.simonediberardino.pokmoniquii.ui.HomeFragment"
         android:label="@string/title_pokedex"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_pokemon"
-        android:name="com.simonediberardino.pokmoniquii.ui.dashboard.SavedPokemonFragment"
+        android:name="com.simonediberardino.pokmoniquii.ui.SavedPokemonFragment"
         android:label="@string/title_pokemon"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_saved" />
 </navigation>
