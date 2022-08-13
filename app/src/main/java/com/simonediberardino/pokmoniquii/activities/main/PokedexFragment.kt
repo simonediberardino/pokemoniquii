@@ -75,7 +75,7 @@ class PokedexFragment : PokemonListFragment() {
     private fun requestPokemonListFromApi(){
         Thread{
             val endPoint = when {
-                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=${CacheData.savedPokemons.size}&limit=${CacheData.ITEMS_PER_PAGE}"
+                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=${CacheData.savedPokemons.size}&limit=${ITEMS_PER_PAGE}"
                 httpPokemonListResponse?.next == null -> return@Thread
                 else -> httpPokemonListResponse!!.next
             }!!

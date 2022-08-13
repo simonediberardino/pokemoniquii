@@ -6,15 +6,17 @@ import android.content.SharedPreferences
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2.Companion.lastInstance
 import com.simonediberardino.pokmoniquii.activities.main.MainActivity
 import com.simonediberardino.pokmoniquii.entities.Pokemon
 import com.simonediberardino.pokmoniquii.entities.PokemonInList
 
 
+/**
+ *
+ */
 @SuppressLint("StaticFieldLeak")
 object CacheData {
-    const val ITEMS_PER_PAGE = 50
-    lateinit var context: MainActivity
     var savedPokemons: MutableList<Pokemon> = mutableListOf()
     private const val SHARED_PREF_REF = "shared_prefs"
     private const val POKEMON_REF = "pokemon"
@@ -22,7 +24,7 @@ object CacheData {
 
     private val applicationData: SharedPreferences
         get() {
-            return context.getSharedPreferences(
+            return lastInstance.getSharedPreferences(
                 SHARED_PREF_REF,
                 Context.MODE_PRIVATE
             )!!
@@ -75,7 +77,7 @@ object CacheData {
     fun savePokemon(pokemon: Pokemon) {
         val pokemonList = getPokemonList() as MutableList<LinkedTreeMap<*,*>>
 
-        if(pokemonList.size < ITEMS_PER_PAGE)
+        if(pokemonList.size < 50)
             return
 
         for(l in pokemonList)

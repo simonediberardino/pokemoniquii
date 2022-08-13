@@ -23,7 +23,6 @@ import com.simonediberardino.pokmoniquii.data.CacheData
 import java.lang.IllegalStateException
 
 
-// TODO: optimize code, show init dialog
 class SavedPokemonFragment : PokemonListFragment() {
     override var _binding: Any? = null
     private val binding: FragmentSavedBinding get() = (_binding as FragmentSavedBinding)

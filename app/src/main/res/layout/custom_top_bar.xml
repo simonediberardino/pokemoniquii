@@ -27,7 +27,7 @@
             android:shadowRadius="1.5"
             android:text="@string/app_name"
             android:textColor="#FFFFFF"
-            android:textSize="24px"
+            android:textSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,11 +35,20 @@
 
         <ImageButton
             android:id="@+id/topbar_info"
-            android:layout_width="35px"
-            android:layout_height="35px"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/ic_baseline_info_24"
             app:layout_constraintBottom_toBottomOf="@+id/topbar_titolo"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/topbar_titolo" />
+
+        <ImageButton
+            android:id="@+id/topbar_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/ic_baseline_arrow_back_26"
+            app:layout_constraintBottom_toBottomOf="@+id/topbar_titolo"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/topbar_titolo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,5 @@
 package com.simonediberardino.pokmoniquii.entities
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import com.github.kittinunf.fuel.httpGet
@@ -8,7 +7,7 @@ import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2
-import com.simonediberardino.pokmoniquii.activities.main.StatsBottomSheet
+import com.simonediberardino.pokmoniquii.activities.main.MainActivity
 import com.simonediberardino.pokmoniquii.activities.stats.StatsActivity
 import com.simonediberardino.pokmoniquii.data.CacheData
 import com.simonediberardino.pokmoniquii.http.StatsReferenceResponse
@@ -68,11 +67,11 @@ open class Pokemon(
         val url =
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 
-        return Utils.bitmapFromUrl(url, CacheData.context)
+        return Utils.bitmapFromUrl(url, AppCompatActivityV2.lastInstance)
     }
 
     protected fun fetch() {
-        isSaved = CacheData.context.dbHandler.isPokemonFavorite(this)
+        isSaved = (AppCompatActivityV2.lastInstance as MainActivity).dbHandler.isPokemonFavorite(this)
         CacheData.savePokemon(this)
     }
 }

@@ -14,6 +14,10 @@ import com.simonediberardino.pokmoniquii.R
 import com.simonediberardino.pokmoniquii.databinding.FragmentPokedexBinding
 
 abstract class PokemonListFragment : Fragment() {
+    companion object{
+        const val ITEMS_PER_PAGE = 50
+    }
+
     abstract var _binding: Any?
 
     protected open var etSearchBar: EditText? = null

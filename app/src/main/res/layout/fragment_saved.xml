@@ -11,20 +11,20 @@
         android:id="@+id/saved_et_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16px"
+        android:layout_marginTop="16dp"
         android:background="@drawable/red_border"
         android:ems="10"
         android:hint="@string/et_hint"
         android:inputType="textPersonName"
-        android:padding="8px"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:layout_width="0px"
-        android:layout_height="0px"
-        android:layout_marginTop="16px"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/no_poke_saved"
-                android:textSize="14px" />
+                android:textSize="14dp" />
 
         </GridLayout>
 

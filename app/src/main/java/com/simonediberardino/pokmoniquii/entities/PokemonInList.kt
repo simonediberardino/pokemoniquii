@@ -2,8 +2,10 @@ package com.simonediberardino.pokmoniquii.entities
 
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2
 import com.simonediberardino.pokmoniquii.data.CacheData
-import com.simonediberardino.pokmoniquii.data.CacheData.context
+import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2.*
+import com.simonediberardino.pokmoniquii.activities.main.MainActivity
 import com.simonediberardino.pokmoniquii.utils.Utils
 import com.simonediberardino.pokmoniquii.utils.Utils.capitalizeWords
 
@@ -26,16 +28,16 @@ class PokemonInList(
 
     internal fun update() {
         if (isSaved) {
-            context.dbHandler.addNewPokemon(this)
+            (AppCompatActivityV2.lastInstance as MainActivity).dbHandler.addNewPokemon(this)
         } else {
-            context.dbHandler.deletePokemon(this)
+            (AppCompatActivityV2.lastInstance as MainActivity).dbHandler.deletePokemon(this)
         }
     }
 
     private fun updateImage() {
         Thread{
             val bitmap = bitmapFromUrl()
-            context.runOnUiThread { imageView.setImageBitmap(bitmap) }
+            (AppCompatActivityV2.lastInstance as MainActivity).runOnUiThread { imageView.setImageBitmap(bitmap) }
         }.start()
     }
 

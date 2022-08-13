@@ -14,9 +14,19 @@ import com.simonediberardino.pokmoniquii.R
 import com.simonediberardino.pokmoniquii.ui.InfoDialog
 
 open class AppCompatActivityV2 : AppCompatActivity(){
+    companion object{
+        lateinit var lastInstance: AppCompatActivityV2
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lastInstance = this
         this.customizeTopBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lastInstance = this
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -32,6 +42,10 @@ open class AppCompatActivityV2 : AppCompatActivity(){
 
         findViewById<View>(R.id.topbar_info).setOnClickListener {
             InfoDialog(this).show()
+        }
+
+        findViewById<View>(R.id.topbar_back).setOnClickListener {
+            onBackPressed()
         }
     }
 

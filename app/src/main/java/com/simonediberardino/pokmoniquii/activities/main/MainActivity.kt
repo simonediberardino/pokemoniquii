@@ -20,8 +20,6 @@ class MainActivity : AppCompatActivityV2() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        CacheData.context = this
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

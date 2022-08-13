@@ -11,7 +11,6 @@ import android.util.DisplayMetrics
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
-import com.simonediberardino.pokmoniquii.data.CacheData.context
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
