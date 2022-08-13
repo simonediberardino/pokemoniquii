@@ -1,5 +1,6 @@
 package com.simonediberardino.pokmoniquii.http
 
+
 data class HttpPokemonListResponse(
     val count: Int,
     val next: String?,

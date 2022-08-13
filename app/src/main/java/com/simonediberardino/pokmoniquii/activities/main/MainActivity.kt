@@ -1,19 +1,19 @@
-package com.simonediberardino.pokmoniquii.activities
+package com.simonediberardino.pokmoniquii.activities.main
 
-import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.simonediberardino.pokmoniquii.R
+import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2
 import com.simonediberardino.pokmoniquii.databinding.ActivityMainBinding
-import com.simonediberardino.pokmoniquii.sharedprefs.CacheData
+import com.simonediberardino.pokmoniquii.data.CacheData
 import com.simonediberardino.pokmoniquii.sqlite.DbHandler
+import com.simonediberardino.pokmoniquii.ui.InfoDialog
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivityV2() {
     private lateinit var binding: ActivityMainBinding
     internal var dbHandler = DbHandler(this)
 
@@ -29,12 +29,15 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_pokedex, R.id.navigation_pokemon
-            )
+            setOf(R.id.navigation_pokedex, R.id.navigation_pokemon)
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        if(CacheData.isFirstStart()){
+            InfoDialog(this).show()
+            CacheData.setFirstStart(true)
+        }
     }
 }

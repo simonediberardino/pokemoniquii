@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pokemon_dialog_background">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:layout_marginBottom="64px"
+        android:background="@drawable/pokeball_gif"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </pl.droidsonroids.gif.GifImageView>
+
+    <Button
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16px"
+        android:layout_marginTop="16px"
+        android:layout_marginEnd="16px"
+        android:layout_marginBottom="16px"
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="false"
+        android:gravity="center"
+        android:padding="16px"
+        android:text="@string/info_dialog"
+        android:textColor="@color/dark_red"
+        app:layout_constraintBottom_toTopOf="@+id/gifImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView2"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:layout_marginBottom="32px"
+        android:background="@drawable/pokeball_gif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"></pl.droidsonroids.gif.GifImageView>
+</androidx.constraintlayout.widget.ConstraintLayout>

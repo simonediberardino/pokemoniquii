@@ -61,7 +61,7 @@ class DbHandler(activity: AppCompatActivity) : SQLiteOpenHelper(
         db.close()
     }
 
-    fun isPokemonSaved(pokemon: Pokemon): Boolean {
+    fun isPokemonFavorite(pokemon: Pokemon): Boolean {
         return checkIsDataAlreadyInDBorNot(POK_COL, pokemon.id.toString())
     }
 
@@ -83,8 +83,54 @@ class DbHandler(activity: AppCompatActivity) : SQLiteOpenHelper(
         return true
     }
 
+    fun getSavedPokemonIds(): MutableList<String> {
+        // database for reading our database.
+        val db = this.readableDatabase
+
+        // on below line we are creating a cursor with query to read data from database.
+        val cursorCourses = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+
+        // on below line we are creating a new array list.
+        val resultList = mutableListOf<String>()
+        // moving our cursor to first position.
+
+        if (cursorCourses.moveToFirst()) {
+            do {
+                resultList.add(cursorCourses.getString(1))
+            } while (cursorCourses.moveToNext())
+        }
+        // at last closing our cursor
+        // and returning our array list.
+        cursorCourses.close()
+        return resultList
+    }
+
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME");
         onCreate(db)
     }
 }
+
+/*
+    fun getSavedPokemonIds(): MutableList<String> {
+        // database for reading our database.
+        val db = this.readableDatabase
+
+        // on below line we are creating a cursor with query to read data from database.
+        val cursorCourses = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+
+        // on below line we are creating a new array list.
+        val resultList = mutableListOf<String>()
+        // moving our cursor to first position.
+
+        if (cursorCourses.moveToFirst()) {
+            do {
+                resultList.add(cursorCourses.getString(1))
+            } while (cursorCourses.moveToNext())
+        }
+        // at last closing our cursor
+        // and returning our array list.
+        cursorCourses.close()
+        return resultList
+    }
+ */

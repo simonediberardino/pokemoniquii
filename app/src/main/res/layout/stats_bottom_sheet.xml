@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stats_bottom_sheet_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/round_top"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="16px"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="1px"
+            android:layout_height="1px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/stats_image"
+            android:layout_width="0px"
+            android:layout_height="150px"
+            android:layout_marginTop="24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_android_24" />
+
+        <TextView
+            android:id="@+id/stats_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="20px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stats_image" />
+
+        <TextView
+            android:id="@+id/stats_xp_tv"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32px"
+            android:layout_marginTop="16px"
+            android:layout_marginEnd="32px"
+            android:text="@string/stats_base_xp"
+            android:textColor="@color/lightgrey"
+            app:layout_constraintEnd_toStartOf="@+id/stats_xp_pb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stats_name" />
+
+        <ProgressBar
+            android:id="@+id/stats_xp_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32px"
+            android:layout_marginEnd="32px"
+            android:progressBackgroundTint="@color/dark_red"
+            app:layout_constraintBottom_toBottomOf="@+id/stats_xp_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view2"
+            app:layout_constraintTop_toTopOf="@+id/stats_xp_tv" />
+
+        <TextView
+            android:id="@+id/stats_weight_tv"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32px"
+            android:layout_marginEnd="32px"
+            android:text="@string/stats_weight"
+            android:textColor="@color/lightgrey"
+            app:layout_constraintBottom_toBottomOf="@+id/stats_weight_pb"
+            app:layout_constraintEnd_toStartOf="@+id/stats_xp_pb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/stats_weight_pb" />
+
+        <ProgressBar
+            android:id="@+id/stats_weight_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16px"
+            android:progressBackgroundTint="@color/dark_red"
+            app:layout_constraintEnd_toEndOf="@+id/stats_xp_pb"
+            app:layout_constraintStart_toStartOf="@+id/stats_xp_pb"
+            app:layout_constraintTop_toBottomOf="@+id/stats_xp_tv" />
+
+        <TextView
+            android:id="@+id/stats_height_tv"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32px"
+            android:layout_marginEnd="32px"
+            android:text="@string/stats_height"
+            android:textColor="@color/lightgrey"
+            app:layout_constraintBottom_toBottomOf="@+id/stats_height_pb"
+            app:layout_constraintEnd_toStartOf="@+id/stats_xp_pb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/stats_height_pb" />
+
+        <ProgressBar
+            android:id="@+id/stats_height_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16px"
+            android:progressBackgroundTint="@color/dark_red"
+            app:layout_constraintEnd_toEndOf="@+id/stats_weight_pb"
+            app:layout_constraintStart_toStartOf="@+id/stats_weight_pb"
+            app:layout_constraintTop_toBottomOf="@+id/stats_weight_pb" />
+
+        <TextView
+            android:id="@+id/stats_hp_tv"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32px"
+            android:layout_marginEnd="32px"
+            android:text="@string/stats_hp"
+            android:textColor="@color/lightgrey"
+            app:layout_constraintBottom_toBottomOf="@+id/stats_hp_pb"
+            app:layout_constraintEnd_toStartOf="@+id/stats_xp_pb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/stats_hp_pb" />
+
+        <ProgressBar
+            android:id="@+id/stats_hp_pb"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16px"
+            android:progressBackgroundTint="@color/dark_red"
+            app:layout_constraintEnd_toEndOf="@+id/stats_weight_pb"
+            app:layout_constraintStart_toStartOf="@+id/stats_weight_pb"
+            app:layout_constraintTop_toBottomOf="@+id/stats_height_pb" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:layout_marginBottom="32px"
+            android:background="@drawable/pokeball_gif"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stats_hp_tv"></pl.droidsonroids.gif.GifImageView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
