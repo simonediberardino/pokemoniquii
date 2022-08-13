@@ -16,12 +16,20 @@ class PokemonInList(
     override var id: Int,
     override var name: String,
     var imageView: ImageView,
-    var viewGroup: ViewGroup
+    var viewGroup: ViewGroup,
+    override var isSaved: Boolean = false,
+    override var weight: Int = -1,
+    override var height: Int = -1,
+    override var hp: Int = -1,
+    override var xp: Int = -1
 ) : Pokemon() {
 
     init {
         name = name.capitalizeWords()
-        CacheData.savedPokemons.add(this)
+
+        if(!CacheData.savedPokemons.any { it.id == this.id })
+            CacheData.savedPokemons.add(this)
+
         updateImage()
         fetch()
     }
@@ -36,8 +44,8 @@ class PokemonInList(
 
     private fun updateImage() {
         Thread{
-            val bitmap = bitmapFromUrl()
-            (AppCompatActivityV2.lastInstance as MainActivity).runOnUiThread { imageView.setImageBitmap(bitmap) }
+            val bitmap = bitmapFromUrl() ?: return@Thread
+            (AppCompatActivityV2.lastInstance).runOnUiThread { imageView.setImageBitmap(bitmap) }
         }.start()
     }
 

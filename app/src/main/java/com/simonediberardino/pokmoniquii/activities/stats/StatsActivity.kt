@@ -63,7 +63,7 @@ class StatsActivity : AppCompatActivityV2() {
         hpPB.progress = pokemon.hp
 
         Thread{
-            val bitmap = pokemon.bitmapFromUrl()
+            val bitmap = pokemon.bitmapFromUrl() ?: return@Thread
             runOnUiThread { pokemonIV.setImageBitmap(bitmap) }
         }.start()
 

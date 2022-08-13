@@ -46,7 +46,7 @@ object CacheData {
 
     private fun updatePokemonList(jsonString: String){
         val dataEditor = applicationData.edit()
-        dataEditor.putString(SHARED_PREF_REF, jsonString)
+        dataEditor.putString(POKEMON_REF, jsonString)
         dataEditor.apply()
     }
 
@@ -56,9 +56,30 @@ object CacheData {
 
         for(j: Any in mutableList){
             if(j is PokemonInList){
-                dataTemplate.add(Pokemon(j.id, j.name))
+                dataTemplate.add(
+                    Pokemon(
+                        j.id,
+                        j.name,
+                        j.isSaved,
+                        j.weight,
+                        j.height,
+                        j.hp,
+                        j.xp
+                    )
+                )
             }else if(j is LinkedTreeMap<*,*>){
-                dataTemplate.add(Pokemon((j["id"] as Double).toInt(), j["name"] as String))
+                val pokemon = Pokemon(
+                    (j["id"] as Double).toInt(),
+                    j["name"] as String,
+                    j["isSaved"] as Boolean? ?: false,
+                    (j["weight"] as Double).toInt(),
+                    (j["height"] as Double).toInt(),
+                    (j["hp"] as Double).toInt(),
+                    (j["xp"] as Double).toInt()
+                )
+                dataTemplate.add(
+                    pokemon
+                )
 
             }
         }
@@ -77,18 +98,21 @@ object CacheData {
     fun savePokemon(pokemon: Pokemon) {
         val pokemonList = getPokemonList() as MutableList<LinkedTreeMap<*,*>>
 
-        if(pokemonList.size < 50)
+        if(pokemonList.size >= 20)
             return
 
         for(l in pokemonList)
-            if((l["id"] as Double).toInt() == pokemon.id)
+            if((l["id"] as Double).toInt() == pokemon.id) {
                 return
+            }
 
         doSavePokemon(pokemon)
+
     }
 
     private fun doSavePokemon(pokemon: Pokemon){
         val pokemonList = (getPokemonList() as MutableList<Pokemon>)
+
         pokemonList.add(pokemon)
         savePokemonList(pokemonList)
     }

@@ -4,16 +4,16 @@
     <string name="title_pokemon">Pokémon</string>
     <string name="pokemon_id">#{pokemon_id}</string>
     <string name="pokemon_name">{pokemon_name}</string>
-    <string name="show_more">Mostra altro</string>
-    <string name="et_hint">Cerca</string>
+    <string name="show_more">Show more</string>
+    <string name="et_hint">Search</string>
     <string name="ok">OK</string>
-    <string name="cancel">Annulla</string>
-    <string name="confirm_pokemon_delete">Sei sicuro di voler rimuovere {pokemon} dal tuo archivio?</string>
-    <string name="error_no_internet">Connessione a internet assente</string>
-    <string name="stats_base_xp">XP Base</string>
-    <string name="stats_weight">Peso</string>
-    <string name="stats_hp">Salute</string>
-    <string name="stats_height">Altezza</string>
-    <string name="no_poke_saved">Nessun Pokémon trovato, utilizza il tuo Pokédex per catturarne qualcuno!</string>
-    <string name="info_dialog"><b>Benvenuto su questa app!</b>\nNon sai come funziona?\nTramite la sezione \'Pokedex\' puoi catturare e salvare i Pokemon nel tuo dispositivo. I Pokemon salvati verranno mostrati nella sezione \'Pokemon\'. Puoi inoltre visualizzare le loro statistiche interagendo con essi.</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_pokemon_delete">Do you really want to delete {pokemon} from your archive?</string>
+    <string name="error_no_internet">Internet not available</string>
+    <string name="stats_base_xp">Base XP</string>
+    <string name="stats_weight">Weight</string>
+    <string name="stats_hp">HP</string>
+    <string name="stats_height">Height</string>
+    <string name="no_poke_saved">No pokemon found, use your Pokédex to catch someone!</string>
+    <string name="info_dialog"><b>Welcome to Pokémon IQUII!</b>\nHere it is how it works!Through the \'Pokedex\' section you can catch and save Pokemon on your device. The saved Pokemon will be shown in the \Pokemon\' section. You can also view their stats by interacting with them, even if internet is currently not available. Note that the app is translated in both Italian and English language, choose your favorite one!</string>
 </resources>

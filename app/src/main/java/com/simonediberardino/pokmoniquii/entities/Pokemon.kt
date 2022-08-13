@@ -15,28 +15,32 @@ import com.simonediberardino.pokmoniquii.utils.Utils
 import com.simonediberardino.pokmoniquii.utils.Utils.capitalizeWords
 
 open class Pokemon(
-    _id: Int = 0,
+    open var id: Int = 0,
     _name: String = String(),
-    _isSaved: Boolean = false,
-    var weight: Int = -1,
-    var height: Int = -1,
-    var hp: Int = -1,
-    var xp: Int = -1
+    open var isSaved: Boolean = false,
+    open var weight: Int = -1,
+    open var height: Int = -1,
+    open var hp: Int = -1,
+    open var xp: Int = -1
 ) {
-    open var id: Int = _id
     open var name: String = _name.capitalizeWords()
-    var isSaved: Boolean = _isSaved
     val idString get() = "#${(id)}"
 
-    fun showStats(activity: AppCompatActivityV2){
-        fetchStats{
-            val intent = Intent(activity, StatsActivity::class.java)
-            intent.putExtra("pokemonId", id)
-            activity.startActivity(intent)
-        }
+    init {
+        println(CacheData.getPokemonList())
+        fetchStats()
     }
 
-    fun fetchStats(callback: Runnable){
+    fun showStats(activity: AppCompatActivityV2){
+        val intent = Intent(activity, StatsActivity::class.java)
+        intent.putExtra("pokemonId", id)
+        activity.startActivity(intent)
+    }
+
+    private fun fetchStats(callback: Runnable = Runnable {}){
+        if(!Utils.isInternetAvailable())
+            return
+
         Thread{
             val endPoint = "https://pokeapi.co/api/v2/pokemon/${name.lowercase()}"
 
@@ -48,6 +52,7 @@ open class Pokemon(
                             Gson().fromJson(responseJson, StatsReferenceResponse::class.java)
 
                         applyStats(response)
+                        save()
                         callback.run()
                     }
                     else -> return@responseJson
@@ -72,6 +77,12 @@ open class Pokemon(
 
     protected fun fetch() {
         isSaved = (AppCompatActivityV2.lastInstance as MainActivity).dbHandler.isPokemonFavorite(this)
-        CacheData.savePokemon(this)
+    }
+
+    protected fun save(){
+        AppCompatActivityV2.lastInstance.runOnUiThread {
+            if(Utils.isInternetAvailable())
+                CacheData.savePokemon(this)
+        }
     }
 }

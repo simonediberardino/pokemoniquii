@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialog_parent"
-    android:layout_width="700dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
 
     android:background="#FFFFFF"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
 
         android:background="@color/light_blue"
@@ -22,9 +22,10 @@
 
         <ImageView
             android:id="@+id/dialog_close"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_close_24" />
 
         <TextView
@@ -40,7 +41,7 @@
             android:paddingRight="2dp"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="14dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,14 +57,14 @@
         <Button
             android:id="@+id/dialog_cancel_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:backgroundTint="@color/white"
             android:clickable="true"
             android:text="@string/cancel"
             android:textColor="@color/light_blue"
-            android:textSize="40dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view"
@@ -72,7 +73,7 @@
         <Button
             android:id="@+id/dialog_confirm_btn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
             android:backgroundTint="@color/white"
@@ -80,7 +81,7 @@
             android:src="@color/black"
             android:text="@string/ok"
             android:textColor="@color/light_blue"
-            android:textSize="40dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/view"
             app:layout_constraintStart_toStartOf="parent"

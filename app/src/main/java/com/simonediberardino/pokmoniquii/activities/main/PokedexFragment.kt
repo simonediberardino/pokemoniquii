@@ -19,6 +19,7 @@ import com.simonediberardino.pokmoniquii.entities.PokemonInList
 import com.simonediberardino.pokmoniquii.http.HttpPokemonListResponse
 import com.simonediberardino.pokmoniquii.http.PokemonReferenceResponse
 import com.simonediberardino.pokmoniquii.data.CacheData
+import com.simonediberardino.pokmoniquii.entities.Pokemon
 import com.simonediberardino.pokmoniquii.ui.CDialog
 import com.simonediberardino.pokmoniquii.utils.Error
 import com.simonediberardino.pokmoniquii.utils.Utils
@@ -39,13 +40,12 @@ class PokedexFragment : PokemonListFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        httpPokemonListResponse = null
         this.initializeFragment(inflater, container)
         return binding.root
     }
 
     override fun initializeFragment(inflater: LayoutInflater, container: ViewGroup?){
-        CacheData.savedPokemons.clear()
-
         _binding = FragmentPokedexBinding.inflate(inflater, container, false)
         linearLayout = binding.pokedexPokemonLl
 
@@ -70,12 +70,14 @@ class PokedexFragment : PokemonListFragment() {
         }else{
             requestPokemonListFromApi()
         }
+        //inflateCachedPokemon()
+
     }
 
     private fun requestPokemonListFromApi(){
         Thread{
             val endPoint = when {
-                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=${CacheData.savedPokemons.size}&limit=${ITEMS_PER_PAGE}"
+                httpPokemonListResponse == null ->  "https://pokeapi.co/api/v2/pokemon?offset=0&limit=${ITEMS_PER_PAGE}"
                 httpPokemonListResponse?.next == null -> return@Thread
                 else -> httpPokemonListResponse!!.next
             }!!
@@ -97,18 +99,31 @@ class PokedexFragment : PokemonListFragment() {
 
 
     private fun inflateCachedPokemon(){
-        CacheData.getPokemonList().forEach {
+        val list = CacheData.getPokemonList()
+
+        list.sortBy {
+            it as LinkedTreeMap<*,*>
+            it["id"] as Double
+        }
+
+        list.forEach {
             // Needed to prevent errors while casting LinkedMapTree to Pokemon.
             it as LinkedTreeMap<*,*>
             val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
-            inflatePokemon(
-                PokemonInList(
-                    (it["id"] as Double).toInt(),
-                    it["name"] as String,
-                    pokemonViewGroup.findViewById(R.id.pokemon_iv),
-                    pokemonViewGroup as ViewGroup
-                )
+
+            val pokemon = PokemonInList(
+                (it["id"] as Double).toInt(),
+                it["name"] as String,
+                pokemonViewGroup.findViewById(R.id.pokemon_iv),
+                pokemonViewGroup as ViewGroup,
+                (it["isSaved"] as Boolean? ?: false),
+                (it["weight"] as Double).toInt(),
+                (it["height"] as Double).toInt(),
+                (it["hp"] as Double).toInt(),
+                (it["xp"] as Double).toInt()
             )
+
+            inflatePokemon(pokemon)
         }
     }
 
@@ -154,21 +169,7 @@ class PokedexFragment : PokemonListFragment() {
         pokemon.viewGroup.findViewById<ImageView>(R.id.pokemon_toggle_iv).also {
             // Updates the imageview and removes or adds the pokemon from/to the database
             it.setOnClickListener {
-                if(pokemon.isSaved){
-                    CDialog(
-                        activity ?: return@setOnClickListener,
-                        activity?.getString(R.string.confirm_pokemon_delete)?.replace("{pokemon}", pokemon.name) ?: return@setOnClickListener,
-                        {
-                            pokemon.isSaved = false
-                            pokemon.update()
-                            updateSavedImage(pokemon)
-                        }
-                    ).show()
-                }else{
-                    pokemon.isSaved = !pokemon.isSaved
-                    pokemon.update()
-                    updateSavedImage(pokemon)
-                }
+                toggleSavePokemon(pokemon)
             }
         }
 
@@ -176,6 +177,32 @@ class PokedexFragment : PokemonListFragment() {
         activity?.runOnUiThread {
             (pokemon.viewGroup.parent as ViewGroup?)?.removeView(pokemon.viewGroup)
             linearLayout.addView(pokemon.viewGroup)
+        }
+    }
+
+    private fun toggleSavePokemon(pokemon: PokemonInList){
+        if(pokemon.isSaved){
+            CDialog(
+                activity ?: return,
+                activity?.getString(R.string.confirm_pokemon_delete)?.replace("{pokemon}", pokemon.name) ?: return,
+                {
+                    pokemon.isSaved = false
+                    pokemon.update()
+
+                    val index = CacheData.savedPokemons.indexOfFirst { it.id == pokemon.id }
+                    CacheData.savedPokemons[index].isSaved = pokemon.isSaved
+
+                    updateSavedImage(pokemon)
+                }
+            ).show()
+        }else{
+            pokemon.isSaved = !pokemon.isSaved
+            pokemon.update()
+
+            val index = CacheData.savedPokemons.indexOfFirst { it.id == pokemon.id }
+            CacheData.savedPokemons[index].isSaved = pokemon.isSaved
+
+            updateSavedImage(pokemon)
         }
     }
 

@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -42,7 +43,7 @@ object Utils {
         return BitmapFactory.decodeStream(input)
     }
 
-    fun isInternetAvailable(appCompatActivity: Activity): Boolean {
+    fun isInternetAvailable(appCompatActivity: Activity = AppCompatActivityV2.lastInstance): Boolean {
         val cm = appCompatActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val nInfo = cm.activeNetworkInfo
         return nInfo != null && nInfo.isAvailable && nInfo.isConnected

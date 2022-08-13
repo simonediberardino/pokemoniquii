@@ -59,6 +59,7 @@ class SavedPokemonFragment : PokemonListFragment() {
         if(CacheData.savedPokemons.isNotEmpty())
             gridLayout.removeAllViews()
 
+        CacheData.savedPokemons.sortBy { it.id }
         CacheData.savedPokemons.filter { it.isSaved }.forEach { inflatePokemon(it) }
     }
 
@@ -114,8 +115,12 @@ class SavedPokemonFragment : PokemonListFragment() {
         }
 
         savedViews.add(pokemonViewGroup)
+
+        if(!CacheData.savedPokemons.any { it.id == pokemon.id }){
+            CacheData.savedPokemons.add(pokemon)
+        }
+
         activity?.runOnUiThread { gridLayout.addView(pokemonViewGroup) }
     }
-
 
 }
