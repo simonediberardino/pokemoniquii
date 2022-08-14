@@ -1,6 +1,6 @@
 package com.simonediberardino.pokmoniquii.utils
 
-import android.R
+import android.R as R2
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import com.simonediberardino.pokmoniquii.R
 import com.simonediberardino.pokmoniquii.activities.AppCompatActivityV2
 import java.io.IOException
 import java.io.InputStream
@@ -21,7 +22,7 @@ import java.net.URL
 
 object Utils {
     /**
-     * Returns wheter the user scrolled the scroll view till the bottom or not
+     * Returns whether the user scrolled the scroll view till the bottom or not
      */
     fun ScrollView.isAtBottom(): Boolean {
         val view = getChildAt(childCount - 1)
@@ -59,7 +60,7 @@ object Utils {
             intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
         }
 
-        val bundle = ActivityOptionsCompat.makeCustomAnimation(c, R.anim.fade_in, R.anim.fade_out).toBundle()
+        val bundle = ActivityOptionsCompat.makeCustomAnimation(c, R2.anim.fade_in, R2.anim.fade_out).toBundle()
         c.startActivity(intent, bundle)
     }
 

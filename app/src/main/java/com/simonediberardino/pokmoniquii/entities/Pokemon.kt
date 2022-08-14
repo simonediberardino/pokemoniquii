@@ -27,7 +27,6 @@ open class Pokemon(
     val idString get() = "#${(id)}"
 
     init {
-        println(CacheData.getPokemonList())
         fetchStats()
     }
 

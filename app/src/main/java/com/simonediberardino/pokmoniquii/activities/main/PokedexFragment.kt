@@ -29,6 +29,8 @@ class PokedexFragment : PokemonListFragment() {
     override var _binding: Any? = null
     private val binding get() = (_binding as FragmentPokedexBinding)
     private var httpPokemonListResponse: HttpPokemonListResponse? = null
+    private var isInflating: Boolean = false
+
     override var etSearchBar: EditText? = null
         set(value) {
             field = value
@@ -40,6 +42,7 @@ class PokedexFragment : PokemonListFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        CacheData.savedPokemons.clear()
         httpPokemonListResponse = null
         this.initializeFragment(inflater, container)
         return binding.root
@@ -50,7 +53,12 @@ class PokedexFragment : PokemonListFragment() {
         linearLayout = binding.pokedexPokemonLl
 
         scrollView = binding.pokedexScrollView.also {
-            it.setOnScrollChangeListener { _, _, _, _, _ -> if(scrollView.isAtBottom()) nextPage() }
+            it.setOnScrollChangeListener { _, _, _, _, _ ->
+                if (scrollView.isAtBottom()) {
+                    if (!isInflating)
+                        nextPage()
+                }
+            }
         }
 
         etSearchBar = binding.pokedexEtSearch
@@ -65,13 +73,12 @@ class PokedexFragment : PokemonListFragment() {
     }
 
     private fun populateLinearLayout(){
+        isInflating = true
         if(!Utils.isInternetAvailable(activity as Activity)) {
             inflateCachedPokemon()
         }else{
             requestPokemonListFromApi()
         }
-        //inflateCachedPokemon()
-
     }
 
     private fun requestPokemonListFromApi(){
@@ -106,35 +113,44 @@ class PokedexFragment : PokemonListFragment() {
             it["id"] as Double
         }
 
-        list.forEach {
+        for (elList in list) {
             // Needed to prevent errors while casting LinkedMapTree to Pokemon.
-            it as LinkedTreeMap<*,*>
+            elList as LinkedTreeMap<*,*>
             val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
 
+            if(CacheData.savedPokemons.any { pok -> pok.id == (elList["id"] as Double).toInt() }) return
+
             val pokemon = PokemonInList(
-                (it["id"] as Double).toInt(),
-                it["name"] as String,
+                (elList["id"] as Double).toInt(),
+                elList["name"] as String,
                 pokemonViewGroup.findViewById(R.id.pokemon_iv),
                 pokemonViewGroup as ViewGroup,
-                (it["isSaved"] as Boolean? ?: false),
-                (it["weight"] as Double).toInt(),
-                (it["height"] as Double).toInt(),
-                (it["hp"] as Double).toInt(),
-                (it["xp"] as Double).toInt()
+                (elList["isSaved"] as Boolean? ?: false),
+                (elList["weight"] as Double).toInt(),
+                (elList["height"] as Double).toInt(),
+                (elList["hp"] as Double).toInt(),
+                (elList["xp"] as Double).toInt()
             )
 
             inflatePokemon(pokemon)
         }
+
+        isInflating = false
     }
 
     private fun showPokemons(httpPokemonListResponse: HttpPokemonListResponse){
         this.httpPokemonListResponse = httpPokemonListResponse
-        this.httpPokemonListResponse!!.results.forEach { inflatePokemon(it) }
+        for (it in this.httpPokemonListResponse!!.results) {
+            inflatePokemon(it)
+        }
+        isInflating = false
     }
 
     // Inflates the view that represents the pokemon http response
     private fun inflatePokemon(pokemonReferenceResponse: PokemonReferenceResponse){
         val pokemonViewGroup = layoutInflater.inflate(R.layout.pokemon_tab_template, null)
+
+        if(CacheData.savedPokemons.any { it.id == pokemonReferenceResponse.id }) return
 
         val pokemon = PokemonInList(
             pokemonReferenceResponse.id,
