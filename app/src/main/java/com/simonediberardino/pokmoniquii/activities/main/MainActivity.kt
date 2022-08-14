@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivityV2() {
 
         if(CacheData.isFirstStart()){
             InfoDialog(this).show()
-            CacheData.setFirstStart(true)
+            CacheData.setFirstStart(false)
         }
     }
 }
